@@ -18,4 +18,4 @@ spec:
     spec:
       containers:
         - name: fn-fb-pod-cont
-          image: sandeepakula01/mydocker_repo:Java_Project
+          image: sandeepakula01/mydocker_repo:insta_page
