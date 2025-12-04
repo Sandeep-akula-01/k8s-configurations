@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fn-fb
+spec:
+  selector:
+    matchLabels:
+      app: fn-fb
+      env: prod
+  replicas: 2
+  template:
+    metadata:
+      name: fn-fb-pod
+      labels:
+        app: fn-fb
+        env: prod
+    spec:
+      containers:
+        - name: fn-fb-pod-cont
+          image: sandeepakula01/mydocker_repo:Java_Project
