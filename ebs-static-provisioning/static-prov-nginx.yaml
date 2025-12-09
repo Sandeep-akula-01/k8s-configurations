@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nginx-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 20Gi
+  csi:
+    driver: ebs.csi.aws.com
+    volumeHandle: vol-0050cb34180ab59ee
+    fsType: ext4
+---
+apiVersion: v1 
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  volumeName: nginx-pv
+  resources:
+    requests:
+      storage: 5Gi
+---
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    web: nginx-web
+spec:
+  volumes:
+    - name: nginx-pv
+      persistentVolumeClaim:
+        claimName: nginx-pvc
+  nodeSelector:
+    topology.kubernetes.io/zone: ap-south-1a
+  containers:
+    - name: nginx-cont
+      image: nginx
+      volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: nginx-pv
+      ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-lb-svc
+spec:
+  selector:
+    web: nginx-web
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
