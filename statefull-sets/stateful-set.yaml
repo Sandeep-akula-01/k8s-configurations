@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1 
+kind: StatefulSet
+metadata:
+  name: sts-pod
+spec:
+  selector:
+    matchLabels:
+      app: ngnix-sts-app
+  replicas: 3
+  minReadySeconds: 10
+  serviceName: headless-svc-sts
+  template:
+    metadata:
+      labels:
+        app: ngnix-sts-app
+    spec:
+      containers:
+        - name: nginx
+          image: registry.k8s.io/nginx-slim:0.21
+          ports:
+            - containerPort: 80
+              name: web
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: ngnix-sts-app
+      terminationGracePeriodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: ngnix-sts-app
+      spec:
+        storageClassName: ebs-sc-sts
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+
