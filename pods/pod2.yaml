@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: insta-mc
+  labels:
+    app: instagram
+    env: prod
+spec:
+  containers:
+    - name: insta-main-container
+      image: sandeepakula01/mydocker_repo:Java_Project
+
+    - name: insta-tomcat
+      image: tomcat
