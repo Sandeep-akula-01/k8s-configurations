@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: insta-pod
+  #namespace: testing
+  labels:
+    app: insta
+    env: sbox
+spec:
+  containers: 
+    - name: insta-container
+      image: sandeepakula01/mydocker_repo:Java_Project
+  
