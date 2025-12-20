@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: insta-replica
+  labels:
+    name: insta-app
+    env: prod
+spec:
+  selector:
+    matchLabels:
+      name: instagram
+  replicas: 2
+  template:
+    metadata:
+      name: insta-pod
+      labels:
+        name: instagram
+        env: prod
+    spec:
+      containers:
+        - name: insta-container
+          image: sandeepakula01/mydocker_repo:Java_Project
+          ports:
+            - containerPort: 8080
