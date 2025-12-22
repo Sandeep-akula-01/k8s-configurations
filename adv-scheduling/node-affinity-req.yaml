@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-using-na-req-2
+  labels:
+    app: backend-app
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: env
+                operator: In 
+                values:
+                  - prod
+              - key: topology.kubernetes.io/zone
+                operator: NotIn
+                values:
+                  - ap-south-1b 
+  containers:
+    - name: nginx-pod
+      image: nginx
