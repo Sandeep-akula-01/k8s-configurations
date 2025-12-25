@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql-readiness-pod
+  labels:
+    app: mysql
+spec:
+  containers:
+  - name: mysql
+    image: mysql:8.0
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "rootpassword"          # Set a root password
+    - name: MYSQL_DATABASE
+      value: "testdb"                # Optional: create a default database
+    - name: MYSQL_USER
+      value: "testuser"              # Optional: create a test user
+    - name: MYSQL_PASSWORD
+      value: "testpass"              # Optional: create test user password
+
+
+
+    livenessProbe:
+      tcpSocket:
+        port: 3306
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      failureThreshold: 3
+
+    readinessProbe:
+      exec:
+        command:
+          - sh 
+          - -c
+          - "mysqladmin ping -h 127.0.0.1 -u root -prootpassword"
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      failureThreshold: 3
